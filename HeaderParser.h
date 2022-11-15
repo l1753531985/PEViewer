@@ -12,20 +12,30 @@
 #include <string.h>
 #include "PEData.h"
 
-#define DOS_HEADER_BUF_SIZE 40
-
 using namespace std;
 
 class HeaderParser {
 public:
-	HeaderParser(const string& name):filename{name} { filePtr = fopen(name.c_str(),"rb"); dosHeaderFlag = dosHeaderParse(); } 
+	HeaderParser(const string& name)
+		:filename{name} 
+	{ 
+		filePtr = fopen(name.c_str(),"rb"); 
+		dosHeaderFlag = dosHeaderParse();
+		NTHeaderFlag = NTHeaderParse();
+	} 
 	bool dosHeaderParse();	
+	bool NTHeaderParse();	
 	bool getHexDump(uint8_t* buf, int size, int count, long seek);
 	~HeaderParser() { if (filePtr) fclose(filePtr); }
 private:
 	string filename;
 	bool dosHeaderFlag = false;
+	bool NTHeaderFlag = false;
 	DosHeader dh;
+	NTHeader nth;
 	FILE* filePtr = NULL;
+	bool SignatureParse();
+	bool ImageFileHeaderParse();
+	bool ImageOptionalHeaderParse();
 };
 #endif
