@@ -91,5 +91,21 @@ bool HeaderParser::NTHeaderParse()
 	return SignatureParse() && ImageFileHeaderParse() && ImageOptionalHeaderParse();
 }
 
+bool HeaderParser::sectionHeaderParse()
+{
+	int seek_start = dh.e_lfanew+SIGNATURE_HEADER_BUF_SIZE+IMAGE_FILE_HEADER_BUF_SIZE+nth.FileHeader.SizeOfOptionalHeader;
+	uint8_t buf[SECTION_HEADER_BUF_SIZE];
+	for (int i = 0; i < nth.FileHeader.NumberOfSections; i++)
+	{
+		if (!getHexDump(buf,SECTION_HEADER_BUF_SIZE,1,seek_start+SECTION_HEADER_BUF_SIZE*i))
+			return false;
+		SectionHeader sh;
+		memcpy(&sh,buf,SECTION_HEADER_BUF_SIZE);
+		//printf("%s\n", sh.Name);
+		vsh.push_back(sh);
+	}
+	return true;
+}
+
 
 

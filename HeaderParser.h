@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "PEData.h"
+#include <vector>
 
 using namespace std;
 
@@ -22,17 +23,24 @@ public:
 		filePtr = fopen(name.c_str(),"rb"); 
 		dosHeaderFlag = dosHeaderParse();
 		NTHeaderFlag = NTHeaderParse();
+		SectionHeaderFlag = sectionHeaderParse();
 	} 
 	bool dosHeaderParse();	
 	bool NTHeaderParse();	
+	bool sectionHeaderParse();
 	bool getHexDump(uint8_t* buf, int size, int count, long seek);
-	~HeaderParser() { if (filePtr) fclose(filePtr); }
+	~HeaderParser() 
+	{ 
+		if (filePtr) fclose(filePtr); 
+	}
 private:
 	string filename;
 	bool dosHeaderFlag = false;
 	bool NTHeaderFlag = false;
+	bool SectionHeaderFlag = false;
 	DosHeader dh;
 	NTHeader nth;
+	vector<SectionHeader> vsh;
 	FILE* filePtr = NULL;
 	bool SignatureParse();
 	bool ImageFileHeaderParse();

@@ -9,8 +9,9 @@
 #define DOS_HEADER_BUF_SIZE 64 
 #define SIGNATURE_HEADER_BUF_SIZE 4 
 #define IMAGE_FILE_HEADER_BUF_SIZE 20
+#define SECTION_HEADER_BUF_SIZE 40
 
-struct DosHeader {
+typedef struct _DosHeader {
 	uint16_t e_magic;
 	uint16_t e_cblp;
 	uint16_t e_cp;
@@ -30,7 +31,7 @@ struct DosHeader {
 	uint16_t e_oeminfo;
 	uint16_t e_res2[10];
 	uint32_t e_lfanew;	
-};
+} DosHeader;
 
 typedef struct _IMAGE_FILE_HEADER {
 	uint16_t Machine;
@@ -83,9 +84,28 @@ typedef struct _IMAGE_OPTIONAL_HEADER {
 	IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 } IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;
 
-struct NTHeader {
+typedef struct _NTHeader {
 	uint32_t signature;
 	IMAGE_FILE_HEADER FileHeader;
 	IMAGE_OPTIONAL_HEADER32 OptionalHeader;
-};
+} NTHeader;
+
+#define IMAGE_SIZEOF_SHORT_NAME 8
+
+typedef struct _SectionHeader {
+	uint8_t Name[IMAGE_SIZEOF_SHORT_NAME];
+	union {
+		uint32_t PhysicalAddress;	
+		uint32_t VirtualSize;
+	} Misc;
+	uint32_t VirtualAddress;
+	uint32_t SizeOfRawData;
+	uint32_t PointerToRawData;
+	uint32_t PointerToRelocations;
+	uint32_t PointerToLinenumbers;
+	uint16_t NumberOfRelocations;
+	uint16_t NumberOfLinenumbers;
+	uint32_t Characteristics;
+} SectionHeader, *PSectionHeader;
+
 #endif
