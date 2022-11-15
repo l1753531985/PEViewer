@@ -1,7 +1,7 @@
 /*************************************************************************
     > File Name: ./HeaderParser.h
-    > Author: ma6174
-    > Mail: ma6174@163.com 
+    > Author: LiRvs 
+    > Mail: l1753531985@gmail.com 
     > Created Time: Mon 14 Nov 2022 04:28:33 AM EST
  ************************************************************************/
 #ifndef _HEADERPARSER_H_
